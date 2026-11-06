@@ -215,31 +215,16 @@ function add(){const w=$("nw").value.trim(),m=$("nm").value.trim(),p=$("ni").val
 
 function check(){
     const pw = $("pw").value.trim();
-    if(!pw) { $("err").textContent="❌ Vui lòng nhập mã kích hoạt!"; return; }
-    
-    $("err").textContent = "⏳ Đang kết nối máy chủ để kiểm tra...";
-    $("bk").disabled = true; // Khóa nút bấm trong lúc chờ
-    
-    // Gọi lên Google Apps Script
-    fetch(SCRIPT_URL + "?pw=" + encodeURIComponent(pw) + "&device=" + deviceId)
-    .then(res => res.json())
-    .then(data => {
-        $("bk").disabled = false;
-        if(data.status === "ok"){
-            ls.set("gs10_Unlocked", true); 
-            $("lock").style.display = "none";
-            U = pend || U; 
-            pend = 0;
-            load();
-            alert(data.msg); // Báo thành công
-        } else {
-            $("err").textContent = "❌ " + data.msg; // Báo lỗi (sai mã hoặc mã đã bị máy khác xài)
-        }
-    })
-    .catch(err => {
-        $("bk").disabled = false;
-        $("err").textContent = "❌ Lỗi kết nối mạng, vui lòng thử lại!";
-    });
+    if(!pw) { $("err").textContent="❌ Vui lòng nhập mật khẩu!"; return; }
+    if(pw === "1028011981"){
+        ls.set("gs10_Unlocked", true); 
+        $("lock").style.display = "none";
+        U = pend || U; 
+        pend = 0;
+        load();
+    } else {
+        $("err").textContent = "❌ Mật khẩu không chính xác!";
+    }
 }
 
 document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>{T=+b.dataset.t;document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("on",x==b));load()});
